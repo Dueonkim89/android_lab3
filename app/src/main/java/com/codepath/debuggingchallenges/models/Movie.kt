@@ -6,9 +6,9 @@ import org.json.JSONException
 import java.util.ArrayList
 
 class Movie(jsonObject: JSONObject) {
-    val title: String = jsonObject.getString("original-title")
-    val posterUrl: String = String.format("https://image.tmdb.org/t/p/w342/%s", jsonObject.getString("poster_path"))
-    val rating: Double = jsonObject.getDouble("vote_average")
+    var title: String = jsonObject.getString("original_title")
+    var posterUrl: String = String.format("https://image.tmdb.org/t/p/w342/%s", jsonObject.getString("poster_path"))
+    var rating: Double = jsonObject.getDouble("vote_average")
 
     companion object {
         fun fromJSONArray(jsonArray: JSONArray): ArrayList<Movie> {

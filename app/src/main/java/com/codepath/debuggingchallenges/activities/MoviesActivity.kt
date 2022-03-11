@@ -1,10 +1,12 @@
 package com.codepath.debuggingchallenges.activities
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.codepath.debuggingchallenges.adapters.MoviesAdapter
 import android.os.Bundle
 import android.util.Log
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.codepath.debuggingchallenges.R
 import com.codepath.asynchttpclient.AsyncHttpClient
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler
@@ -14,9 +16,9 @@ import okhttp3.Headers
 import java.util.ArrayList
 
 class MoviesActivity : AppCompatActivity() {
-    private var rvMovies: RecyclerView? = null
-    var adapter: MoviesAdapter? = null
-    var movies: List<Movie>? = null
+    lateinit var rvMovies: RecyclerView
+    lateinit var adapter: MoviesAdapter
+    val movies = ArrayList<Movie>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,22 +26,27 @@ class MoviesActivity : AppCompatActivity() {
         rvMovies = findViewById(R.id.rvMovies)
 
         // Create the adapter to convert the array to views
-        val adapter = MoviesAdapter(movies)
+        adapter = MoviesAdapter(movies)
 
         // Attach the adapter to a ListView
-        rvMovies?.adapter = adapter
+        rvMovies.layoutManager = LinearLayoutManager(this)
+        rvMovies.adapter = adapter
         fetchMovies()
     }
 
     private fun fetchMovies() {
-        val url = " https://api.themoviedb.org/3/movie/now_playing?api_key="
+        val url = " https://api.themoviedb.org/3/movie/now_playing?api_key=$API_KEY"
         val client = AsyncHttpClient()
         client[url, null, object : JsonHttpResponseHandler() {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onSuccess(statusCode: Int, headers: Headers, response: JSON) {
+                // Log.i("DK321", "Was a Success! $response")
                 try {
                     val moviesJson = response.jsonObject.getJSONArray("results")
-                    movies = Movie.fromJSONArray(moviesJson)
+                    movies.addAll(Movie.fromJSONArray(moviesJson))
+                    adapter.notifyDataSetChanged()
                 } catch (e: JSONException) {
+                    //Log.i("DK321", "JSON Exception $e")
                     e.printStackTrace()
                 }
             }

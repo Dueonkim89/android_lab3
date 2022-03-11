@@ -1,6 +1,7 @@
 package com.codepath.debuggingchallenges.adapters
 
 import android.graphics.Color
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import android.widget.TextView
 import com.codepath.debuggingchallenges.R
@@ -11,7 +12,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.codepath.debuggingchallenges.models.Movie
 
-class MoviesAdapter(private val movies: List<Movie>?) : RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
+class MoviesAdapter(private val movies: List<Movie>) : RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
     inner class ViewHolder(  // only needed because we need to set the background color
             var view: View) : RecyclerView.ViewHolder(view) {
         // Lookup view for data population
@@ -21,7 +22,7 @@ class MoviesAdapter(private val movies: List<Movie>?) : RecyclerView.Adapter<Mov
     }
 
     override fun getItemCount(): Int {
-        return 0
+        return movies.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -45,6 +46,7 @@ class MoviesAdapter(private val movies: List<Movie>?) : RecyclerView.Adapter<Mov
             val resources = viewHolder.tvName.resources
             val movieRating = movie.rating
             if (movieRating > 6) {
+                // Log.d("DKRating", "Was a Success! $movieRating ${movie.title}")
                 viewHolder.view.setBackgroundColor(Color.GREEN)
             }
             val ratingText = String.format(resources.getString(R.string.rating), movieRating)
