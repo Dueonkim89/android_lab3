@@ -48,6 +48,8 @@ class MoviesAdapter(private val movies: List<Movie>) : RecyclerView.Adapter<Movi
             if (movieRating > 6) {
                 // Log.d("DKRating", "Was a Success! $movieRating ${movie.title}")
                 viewHolder.view.setBackgroundColor(Color.GREEN)
+            } else {
+                viewHolder.view.setBackgroundColor(Color.WHITE)
             }
             val ratingText = String.format(resources.getString(R.string.rating), movieRating)
             viewHolder.tvRating.text = ratingText
